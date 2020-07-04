@@ -10,10 +10,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -25,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -200,9 +198,14 @@ public class RemoteSession {
 				Location loc1 = parseRelativeBlockLocation(args[0], args[1], args[2]);
 				Location loc2 = parseRelativeBlockLocation(args[3], args[4], args[5]);
 				int blockType = Integer.parseInt(args[6]);
-				byte data = args.length > 7? Byte.parseByte(args[7]) : (byte) 0;
+				byte data = args.length > 7 ? Byte.parseByte(args[7]) : (byte) 0;
 				setCuboid(loc1, loc2, blockType, data);
-				
+
+				//world.dropItem
+			}else if (c.equals("world.dropItem")){
+				Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
+				world.dropItem(loc,  new ItemStack(Material.getMaterial(Integer.parseInt(args[3]))) ) ;
+
 			// world.getPlayerIds
 			} else if (c.equals("world.getPlayerIds")) {
 				StringBuilder bdr = new StringBuilder();
@@ -361,6 +364,10 @@ public class RemoteSession {
 				//get players current location, so when they are moved we will use the same pitch and yaw (rotation)
 				Location loc = currentPlayer.getLocation();
 				currentPlayer.teleport(parseRelativeLocation(x, y, z, loc.getPitch(), loc.getYaw()));
+				//player.give
+			} else if (c.equals("player.give")){
+				Player currentPlayer = getCurrentPlayer();
+				currentPlayer.getInventory().addItem(new ItemStack(Material.getMaterial(Integer.parseInt(args[0]))));
 
 			// player.setDirection
 			} else if (c.equals("player.setDirection")) {
@@ -406,11 +413,11 @@ public class RemoteSession {
 				Player currentPlayer = getCurrentPlayer();
 				send(currentPlayer.getLocation().getPitch());
 
-			//player.getEyeLocation
-			}else if (c.equals("player.getEyeLocation")) {
-				//System.out.println("getEyeLocation");
+			//player.getTargetBlock
+			}else if (c.equals("player.getTargetBlock")) {
+				//System.out.println("getEyeLocationBlock");
 				Player currentPlayer = getCurrentPlayer();
-				send(currentPlayer.getEyeLocation().getBlock());
+				send(currentPlayer.getTargetBlock(null, 50).getLocation());
 
 			//player.effect
 			}else if (c.equals("player.effect")) {
@@ -419,7 +426,9 @@ public class RemoteSession {
 				String effect = args[0];
 				int seconds = Integer.parseInt(args[1]);
 				int amplifier = Integer.parseInt(args[2]);
+
 				Player currentPlayer = getCurrentPlayer();
+				currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, seconds, amplifier));
 //				int player = Integer.parseInt(args[3]);
 //				if (player != 0)
 //				{
@@ -429,16 +438,16 @@ public class RemoteSession {
 //				System.out.println(effect);
 //				System.out.println(seconds);
 //				System.out.println(amplifier);
-				switch (effect){
+				/*switch (effect){
 					case ("SPEED"):
 						System.out.println("SPEED");
 						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, seconds, amplifier));
 						break;
 					case ("SLOW"):
-						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, seconds, amplifier));
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.getByName(effect), seconds, amplifier));
 						break;
 					case ("FAST_DIGGING"):
-						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, seconds, amplifier));
+
 						break;
 					case ("SLOW_DIGGING"):
 						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, seconds, amplifier));
@@ -519,7 +528,7 @@ public class RemoteSession {
 
 
 				}
-
+*/
 
 			// player.getEntities
 			} else if (c.equals("player.getEntities")) {
@@ -560,7 +569,7 @@ public class RemoteSession {
 			// world.getHeight
 			} else if (c.equals("world.getHeight")) {
 				send(world.getHighestBlockYAt(parseRelativeBlockLocation(args[0], "0", args[1])) - origin.getBlockY());
-				
+
 			// entity.getTile
 			} else if (c.equals("entity.getTile")) {
 				//get entity based on id

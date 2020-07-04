@@ -107,7 +107,15 @@ public class RaspberryJuicePlugin extends JavaPlugin implements Listener {
 		Server server = getServer();
 		server.broadcastMessage("Welcome " + p.getPlayerListName());
 	}
+	@EventHandler
+	public void  onInteract(PlayerInteractEvent event) {
+		ItemStack currentTool = event.getItem();
+		if ((event.getAction() != Action.RIGHT_CLICK_BLOCK) && currentTool.getType() == Material.STICK){
+			Server server = getServer();
+			server.broadcastMessage("Block: " + event.getClickedBlock());
+		}
 
+	}
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		// only react to events which are of the correct type
