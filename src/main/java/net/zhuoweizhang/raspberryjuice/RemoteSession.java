@@ -25,6 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class RemoteSession {
@@ -403,6 +405,121 @@ public class RemoteSession {
 			} else if (c.equals("player.getPitch")) {
 				Player currentPlayer = getCurrentPlayer();
 				send(currentPlayer.getLocation().getPitch());
+
+			//player.getEyeLocation
+			}else if (c.equals("player.getEyeLocation")) {
+				//System.out.println("getEyeLocation");
+				Player currentPlayer = getCurrentPlayer();
+				send(currentPlayer.getEyeLocation().getBlock());
+
+			//player.effect
+			}else if (c.equals("player.effect")) {
+//				System.out.println("effect");
+
+				String effect = args[0];
+				int seconds = Integer.parseInt(args[1]);
+				int amplifier = Integer.parseInt(args[2]);
+				Player currentPlayer = getCurrentPlayer();
+//				int player = Integer.parseInt(args[3]);
+//				if (player != 0)
+//				{
+//					//currentPlayer = Bukkit.getPlayer(player);
+//					System.out.println("poka ne realizovano");
+//				}
+//				System.out.println(effect);
+//				System.out.println(seconds);
+//				System.out.println(amplifier);
+				switch (effect){
+					case ("SPEED"):
+						System.out.println("SPEED");
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, seconds, amplifier));
+						break;
+					case ("SLOW"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, seconds, amplifier));
+						break;
+					case ("FAST_DIGGING"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, seconds, amplifier));
+						break;
+					case ("SLOW_DIGGING"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, seconds, amplifier));
+						break;
+					case ("INCREASE_DAMAGE"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, seconds, amplifier));
+						break;
+					case ("HEAL"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, seconds, amplifier));
+						break;
+					case ("HARM"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HARM, seconds, amplifier));
+						break;
+					case ("JUMP"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, seconds, amplifier));
+						break;
+					case ("CONFUSION"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, seconds, amplifier));
+						break;
+					case ("REGENERATION"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, seconds, amplifier));
+						break;
+					case ("DAMAGE_RESISTANCE"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, seconds, amplifier));
+						break;
+					case ("FIRE_RESISTANCE"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, seconds, amplifier));
+						break;
+					case ("WATER_BREATHING"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, seconds, amplifier));
+						break;
+					case ("INVISIBILITY"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, seconds, amplifier));
+						break;
+					case ("BLINDNESS"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, seconds, amplifier));
+						break;
+
+					case ("NIGHT_VISION"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, seconds, amplifier));
+						break;
+					case ("HUNGER"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, seconds, amplifier));
+						break;
+
+					case ("WEAKNESS"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, seconds, amplifier));
+						break;
+					case ("POISON"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.POISON, seconds, amplifier));
+						break;
+					case ("WITHER"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, seconds, amplifier));
+						break;
+					case ("HEALTH_BOOST"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, seconds, amplifier));
+					case "ABSORPTION":
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, seconds, amplifier));
+						break;
+					case ("SATURATION"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, seconds, amplifier));
+						break;
+					case ("GLOWING"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, seconds, amplifier));
+						break;
+					case ("LEVITATION"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, seconds, amplifier));
+						break;
+					case ("LUCK"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, seconds, amplifier));
+						break;
+					case ("UNLUCK"):
+						currentPlayer.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, seconds, amplifier));
+						break;
+					default:
+						System.out.println("No effect");
+						break;
+
+
+				}
+
 
 			// player.getEntities
 			} else if (c.equals("player.getEntities")) {
